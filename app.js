@@ -141,7 +141,7 @@ function parseDate(strValue) {
         '</section>';
     }
     var days = daysFromToday(nextRec.date, todayValue);
-    var sub = (days === 0) ? "is TODAY!" : "in " + days + " days";
+    var sub = (days === 0) ? "is TODAY!" : ((days === 1) ? "1 day to go" : "days to go");
     return '<section class="card next-card">' +
       '<p class="next-eyebrow">Next up</p>' +
       '<div class="next-icon">' + iconFor(nextRec.name) + '</div>' +
