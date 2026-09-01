@@ -5,11 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kindie Countdown</title>
   <link rel="stylesheet" href="styles.css">
+  <script>
+    // Apply the saved colour theme as early as possible to avoid a flicker.
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem("kindie-theme"); } catch (e) {}
+      if (saved !== "pastel" && saved !== "saturated" && saved !== "dark") saved = "pastel";
+      document.documentElement.setAttribute("data-theme", saved);
+    })();
+  </script>
 </head>
 <body>
   <header class="site-header">
     <h1>☀️ Kindie Countdown 🎈</h1>
     <p class="tagline">Big days, tiny countdowns for our kinder crew!</p>
+    <div class="theme-switcher" role="group" aria-label="Colour theme">
+      <button type="button" class="theme-btn" data-theme="pastel" aria-pressed="false">Pastel</button>
+      <button type="button" class="theme-btn" data-theme="saturated" aria-pressed="false">Bright</button>
+      <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false">Dark</button>
+    </div>
   </header>
 
   <main id="app">
@@ -19,6 +33,27 @@
   <footer class="site-footer">
     <p>Made with 💛 for the kinder classroom.</p>
   </footer>
+
+  <script>
+    // Theme switcher click handling.
+    (function () {
+      var root = document.documentElement;
+      var buttons = document.querySelectorAll(".theme-btn");
+      function apply(t) {
+        root.setAttribute("data-theme", t);
+        try { localStorage.setItem("kindie-theme", t); } catch (e) {}
+        buttons.forEach(function (b) {
+          var active = b.getAttribute("data-theme") === t;
+          b.setAttribute("aria-pressed", active ? "true" : "false");
+          b.classList.toggle("is-active", active);
+        });
+      }
+      buttons.forEach(function (b) {
+        b.addEventListener("click", function () { apply(b.getAttribute("data-theme")); });
+      });
+      apply(root.getAttribute("data-theme") || "pastel");
+    })();
+  </script>
 
   <script src="app.js"></script>
 </body>
