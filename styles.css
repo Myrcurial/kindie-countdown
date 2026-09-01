@@ -89,6 +89,7 @@ body {
 .site-header {
   text-align:center;
   padding:36px 20px 8px;
+  position:relative;
 }
 
 .site-header h1 {
@@ -112,21 +113,22 @@ display:inline-block;
 }
 
 .theme-switcher {
+  position:absolute;
+  top:16px;
+  right:22px;
   display:flex;
-  justify-content:center;
-  gap:10px;
-  margin-top:16px;
-  flex-wrap:wrap;
+  gap:6px;
+  flex-wrap:nowrap;
 }
 
 .theme-btn {
   font-family:inherit;
-  font-size:15px;
+  font-size:12px;
   font-weight:bold;
   cursor:pointer;
-  border:3px solid var(--yellow);
+  border:2px solid var(--yellow);
   border-radius:999px;
-  padding:8px 18px;
+  padding:5px 11px;
   background:var(--theme-btn-bg);
   color:var(--theme-btn-ink);
   transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
@@ -452,6 +454,13 @@ main {
 
 /* ---- Responsive ---- */
 @media (max-width:480px) {
+  .site-header {
+    padding-top:56px;
+  }
+  .theme-switcher {
+    right:14px;
+    top:10px;
+  }
   .numbers {
     flex-direction:column;
     align-items:stretch;
