@@ -105,24 +105,31 @@ function parseDate(strValue) {
     return "";
   }
 
+  // A DST-safe numeric key (YYYYMMDD) so we always compare calendar dates.
+  function dKey(d) {
+    return (d.getFullYear() * 10000) + ((d.getMonth() + 1) * 100) + d.getDate();
+  }
+
   // School days = weekdays not marked "no school", first to last day.
   function schoolProgress(recordsValue, nowValue) {
     var firstDate = recordsValue[0].date;
     var lastDate = recordsValue[recordsValue.length - 1].date;
     var noSet = {};
-    recordsValue.forEach(function (r) { if (r.noSchool) noSet[r.date.getTime()] = true; });
+    recordsValue.forEach(function (r) { if (r.noSchool) noSet[dKey(r.date)] = true; });
     var total =  0;
     var elapsed =  0;
     var cursor = new Date(firstDate.getTime());
-    while (cursor <= lastDate) {
+    var lastKey = dKey(lastDate);
+    var nowKey = dKey(nowValue);
+    while (dKey(cursor) <= lastKey) {
       var weekday = cursor.getDay();
       var skip = (weekday === 6 || weekday === 0);
-      if (noSet[cursor.getTime()]) skip = true;
+      if (noSet[dKey(cursor)]) skip = true;
       if (!skip) {
         total = total + 1;
-        if (cursor.getTime() < nowValue.getTime()) elapsed = elapsed + 1;
+        if (dKey(cursor) < nowKey) elapsed = elapsed + 1;
       }
-      cursor = new Date(cursor.getTime() + 86400000);
+      cursor.setDate(cursor.getDate() + 1);
     }
     if (elapsed > total) elapsed = total;
     var percent =  0;
@@ -231,7 +238,8 @@ function parseDate(strValue) {
 
   function render(recordsValue) {
     var t = today();
-    var upcomingValue = recordsValue.filter(function (r) { return r.date.getTime() >= t.getTime(); });
+    var visible = recordsValue.filter(function (r) { return (r.name || "").trim() !== ""; });
+    var upcomingValue = visible.filter(function (r) { return r.date.getTime() >= t.getTime(); });
     var nextRec = (upcomingValue.length > 0) ? upcomingValue[0] : null;
     var progressValue = schoolProgress(recordsValue, t);
     var html = nextCard(nextRec, t);
