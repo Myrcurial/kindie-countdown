@@ -19,8 +19,21 @@ date,event,importance,no_school
 
 The very first and very last rows are the first & last days of school; they anchor the school-year progress bar. Rows do not need to be sorted — the page sorts them for you.
 
+### Multi-day breaks (Winter Break, Spring Break, etc.)
+The progress bar counts school days as weekdays that are **not** marked `no_school`. For a break that spans several days, list **every** day in it as its own row, leaving the `event` and `importance` fields empty (the page uses the empty event name to know it's just a "no school" marker and won't show a card for it):
+
+```
+2026-12-21,Winter Holiday,TRUE,TRUE
+2026-12-22,,,TRUE
+2026-12-23,,,TRUE
+...
+2027-01-01,,,TRUE
+```
+
+A row with an empty `event` only removes that day from the school-day tally and never appears in the countdown lists.
+
 ## Hosting
-Hosted with GitHub Pages from the `main` branch root.,
+Hosted with GitHub Pages from the `main` branch root.
 
 ## License
 MIT — see [`LICENSE`](LICENSE).
